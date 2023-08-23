@@ -112,7 +112,7 @@ export default function Home() {
               {imageList.length > 0 &&
                 imageList.map((item, index) => (
                   <div className="img" key={index}>
-                    <Image src={item.pathImage} alt={item.pathImage} />
+                    <Image src={item.pathImage} width={500} height={500} alt={item.pathImage} />
                     <p>{formatTimestamp(item.timeCreate)}</p>
                   </div>
                 ))}
