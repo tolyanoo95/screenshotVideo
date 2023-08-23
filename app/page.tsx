@@ -1,28 +1,39 @@
 'use client'
 import {useRef, useState} from "react";
-import Image from 'next/image'
+import Image from "next/image";
+interface ImageItem {
+  pathImage: string;
+  timeCreate: number;
+}
 
 export default function Home() {
-    const videoInputRef = useRef(null);
-    const videoRef = useRef(null);
-    const canvasRef = useRef(null);
-    const [imageList, setImageList] = useState([])
-    
-    
-    const capture = () => {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+    const videoInputRef = useRef<HTMLInputElement | null>(null);
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [imageList, setImageList] = useState<ImageItem[]>([]);
   
-        saveAsImage()
+  
+    const capture = () => {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      
+      if (!canvas || !video) return;
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return; // This checks if ctx is null and returns early if it is
+      
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      ctx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      
+      saveAsImage()
     };
   
     const saveAsImage = async () => {
       const canvas = canvasRef.current;
+      
+      if (!canvas) return;
+      
       const dataURL = canvas.toDataURL('image/png');
       
       try {
@@ -34,20 +45,21 @@ export default function Home() {
         
         const result = await response.json();
         setImageList((prevImageList) => [...prevImageList, result])
-        console.log(result.pahImage)
+     
         alert('Image saved successfully!');
       } catch (error) {
         alert('Failed to save the image.');
       }
     };
-    
+  
     const handleFileChange = () => {
-      const file = videoInputRef.current.files[0];
+      const files = videoInputRef.current?.files;
       
-      if (file) {
+      if (files && files.length > 0) {
+        const file = files[0];
         const videoURL = URL.createObjectURL(file);
-        videoRef.current.src = videoURL;
-        playVideo()
+        videoRef.current!.src = videoURL;  // The '!' asserts that videoRef.current is non-null.
+        playVideo();
       }
     };
     
@@ -63,7 +75,7 @@ export default function Home() {
       }
     };
   
-    const formatTimestamp = (timestamp) => {
+    const formatTimestamp = (timestamp: number) => {
       const date = new Date(timestamp); // Convert timestamp to Date object
       const yy = date.getFullYear().toString().slice(2);  // Get last 2 digits of the year
       const mm = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is 0-based
@@ -97,14 +109,13 @@ export default function Home() {
               </div>
             </div>
             <div className="imageList">
-              {(imageList) ?
-                imageList.map((item,index) => (
+              {imageList.length > 0 &&
+                imageList.map((item, index) => (
                   <div className="img" key={index}>
-                    {<Image src={item.pahImage} width={300} height={300} alt="" />}
+                    <Image src={item.pathImage} alt={item.pathImage} />
                     <p>{formatTimestamp(item.timeCreate)}</p>
                   </div>
-                ))
-                : null}
+                ))}
             </div>
             <div className="d-none">
               <canvas ref={canvasRef}></canvas>
