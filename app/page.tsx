@@ -78,7 +78,7 @@ export default function Home() {
     return (
         <>
             <div className="uploadFile">
-              <input type="file" accept="video/*" ref={videoInputRef} accept="video/*"  onChange={handleFileChange} />
+              <input type="file" accept="video/*" ref={videoInputRef} onChange={handleFileChange} />
             </div>
             <div className="video">
               <video ref={videoRef} width="640" height="360" crossOrigin="anonymous">
@@ -100,7 +100,7 @@ export default function Home() {
               {(imageList) ?
                 imageList.map((item,index) => (
                   <div className="img" key={index}>
-                    {<Image src={item.pahImage} width={300} height={300} />}
+                    {<Image src={item.pahImage} width={300} height={300} alt="" />}
                     <p>{formatTimestamp(item.timeCreate)}</p>
                   </div>
                 ))
