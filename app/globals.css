@@ -1,0 +1,42 @@
+.video{
+    margin-top: 15px;
+}
+
+.buttons{
+    display: flex;
+    align-items: center;
+}
+
+.buttons button{
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.buttons div:last-child button{
+    margin-right: 0;
+}
+
+.imageList{
+    margin-top: 15px;
+    display: flex;
+}
+
+.imageList .img{
+    width: 300px;
+    height: 300px;
+    margin: 15px 5px;
+}
+
+.imageList .img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.imageList .img p{
+    text-align: center;
+}
+
+.d-none{
+    display: none;
+}
