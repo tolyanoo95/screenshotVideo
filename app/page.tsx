@@ -98,8 +98,8 @@ export default function Home() {
             </div>
             <div className="imageList">
               {(imageList) ?
-                imageList.map(item => (
-                  <div className="img">
+                imageList.map((item,index) => (
+                  <div className="img" key={index}>
                     {<Image src={item.pahImage} width={300} height={300} />}
                     <p>{formatTimestamp(item.timeCreate)}</p>
                   </div>
